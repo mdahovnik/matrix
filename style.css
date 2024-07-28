@@ -7,6 +7,14 @@ button:hover{
     background-color: #006400;
 }
 
+button:active{
+    background-color: lightgreen;
+}
+
+button:disabled{
+    background-color: lightgray;
+}
+
 button{
     display: flex;
     justify-content: center;

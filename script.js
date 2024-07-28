@@ -4,7 +4,15 @@ const fontSize = document.querySelector('.font_size');
 const delay_size = document.querySelector('.delay_size');
 const tail_size = document.querySelector('.tail_size');
 
-let font = 10;
+const upFontBtn = document.querySelector('.upButton');
+const downFontBtn = document.querySelector('.downButton');
+downFontBtn.disabled = true;
+const upDelayBtn = document.querySelector('.up_delay');
+const downDelayBtn = document.querySelector('.down_delay');
+const upTailBtn = document.querySelector('.up_tail');
+const downTailBtn = document.querySelector('.down_tail');
+
+let font = 8;
 let cols = canvas.width;
 let rows = canvas.height;
 let delay = 80; // скорость падения символов
@@ -42,7 +50,7 @@ function render() {
 
     // для эффекта затухания символов закрашиваем canvas черным полупрозрачным цветом,
     // альфа-каналом регулируем длину затухающего хвоста (0.03)
-    context.fillStyle = `rgba(0, 0, 0, ${tail})`;
+    context.fillStyle = `rgba(0, 0, 0, ${tail.toFixed(2)})`;
     context.fillRect(0, 0, cols, rows);
 }
 
@@ -50,51 +58,60 @@ let t = setInterval(render, delay);
 
 
 // КНОПКИ ИЗМЕНЕНИЯ ШРИФТА
-const upFontBtn = document.querySelector('.upButton');
 upFontBtn.addEventListener('click', () => {
-    if (font < 34) {
-        font += 2;
-        context.font = font + 'px serif';
-        fontSize.textContent = 'FONT: ' + font;
-    }
+    downFontBtn.disabled = false;
+    font += 2;
+    context.font = font + 'px serif';
+    fontSize.textContent = 'FONT: ' + font;
+    if (font > 32)
+        upFontBtn.disabled = true;
 });
 
-const downFontBtn = document.querySelector('.downButton');
 downFontBtn.addEventListener('click', () => {
-    if (font > 10) {
-        font -= 2;
-        context.font = font + 'px serif';
-        fontSize.textContent = 'FONT: ' + font;
-    }
+    upFontBtn.disabled = false;
+    font -= 2;
+    fontSize.textContent = 'FONT: ' + font;
+    context.font = font + 'px serif';
+    if (font < 10)
+        downFontBtn.disabled = true;
 });
 
 // КНОПКИ ИЗМЕНЕНИЯ ЗАДЕРЖКИ ОТРИСОВКИ КАДРОВ
-const upDelayBtn = document.querySelector('.up_delay');
 upDelayBtn.addEventListener('click', () => {
-    clearInterval(t);
     delay += 10;
-    t = setInterval(render, delay);
     delay_size.textContent = 'DELAY: ' + delay;
+    downDelayBtn.disabled = false;
+    if (delay < 150) {
+        clearInterval(t);
+        t = setInterval(render, delay);
+    } else
+        upDelayBtn.disabled = true;
+
 });
 
-const downDelayBtn = document.querySelector('.down_delay');
 downDelayBtn.addEventListener('click', () => {
-    clearInterval(t);
     delay -= 10;
-    t = setInterval(render, delay);
     delay_size.textContent = 'DELAY: ' + delay;
+    upDelayBtn.disabled = false;
+    if (delay > 0) {
+        clearInterval(t);
+        t = setInterval(render, delay);
+    } else
+        downDelayBtn.disabled = true;
 });
 
 // КНОПКИ ИЗМЕНЕНИЯ ЗАДЕРЖКИ ОТРИСОВКИ КАДРОВ
-const upTailBtn = document.querySelector('.up_tail');
 upTailBtn.addEventListener('click', () => {
-    if (tail.toFixed(2) < 0.20) tail += 0.01;
+    downTailBtn.disabled = false;
+    tail += 0.01;
     tail_size.textContent = 'TAIL: ' + tail.toFixed(2);
+    if (tail.toFixed(2) > 0.19) upTailBtn.disabled = true;
 });
 
-const downTailBtn = document.querySelector('.down_tail');
 downTailBtn.addEventListener('click', () => {
-    if (tail.toFixed(2) > 0) tail -= 0.01;
+    upTailBtn.disabled = false;
+    tail -= 0.01;
     tail_size.textContent = 'TAIL: ' + tail.toFixed(2);
+    if (tail.toFixed(2) < 0.02) downTailBtn.disabled = true;
 });
 
