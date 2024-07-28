@@ -13,6 +13,7 @@ button:active{
 
 button:disabled{
     background-color: lightgray;
+    cursor: default;
 }
 
 button{

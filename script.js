@@ -31,7 +31,6 @@ tail_size.textContent = 'TAIL: ' + tail;
 for (let i = 0; i < 96; i++)
     katakanaSymbols.push(String.fromCharCode(parseInt('0x30a0', 16) + i));
 
-
 // заполняем массив произвольными значениями положения символа по оси Y
 for (let i = 0; i < cols / font; i++)
     rowPosition[i] = Math.floor(Math.random() * (cols / font));
@@ -63,8 +62,7 @@ upFontBtn.addEventListener('click', () => {
     font += 2;
     context.font = font + 'px serif';
     fontSize.textContent = 'FONT: ' + font;
-    if (font > 32)
-        upFontBtn.disabled = true;
+    if (font > 32) upFontBtn.disabled = true;
 });
 
 downFontBtn.addEventListener('click', () => {
@@ -72,8 +70,7 @@ downFontBtn.addEventListener('click', () => {
     font -= 2;
     fontSize.textContent = 'FONT: ' + font;
     context.font = font + 'px serif';
-    if (font < 10)
-        downFontBtn.disabled = true;
+    if (font < 10) downFontBtn.disabled = true;
 });
 
 // КНОПКИ ИЗМЕНЕНИЯ ЗАДЕРЖКИ ОТРИСОВКИ КАДРОВ
