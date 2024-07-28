@@ -12,10 +12,12 @@ const downDelayBtn = document.querySelector('.down_delay');
 const upTailBtn = document.querySelector('.up_tail');
 const downTailBtn = document.querySelector('.down_tail');
 
-let font = 8;
+let font = 10;
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 let cols = canvas.width;
 let rows = canvas.height;
-let delay = 80; // скорость падения символов
+let delay = 70; // скорость падения символов
 let tail = 0.08; // скорость затухания символов
 let rowPosition = [];
 let katakanaSymbols = [];
@@ -26,20 +28,20 @@ fontSize.textContent = 'FONT: ' + font;
 delay_size.textContent = 'DELAY: ' + delay;
 tail_size.textContent = 'TAIL: ' + tail;
 
-// Сохраняем в массив символы из алфавита Катакана (タイ ヲァヌ ギイ カア ビェン)
-//используя кодировку юникод (взял из Википедии)
+// Сохраняем в массив символы из алфавита "Катакана" (タイ ヲァヌ ギイ カア ビェン)
+// используя кодировку юникод (взял из Википедии)
 for (let i = 0; i < 96; i++)
     katakanaSymbols.push(String.fromCharCode(parseInt('0x30a0', 16) + i));
 
 // заполняем массив произвольными значениями положения символа по оси Y
-for (let i = 0; i < cols / font; i++)
+for (let i = 0; i < cols; i++)
     rowPosition[i] = Math.floor(Math.random() * (cols / font));
 
 function render() {
     // переключаемся на зеленый цвет и печатаем в цикле символы в строке
     context.fillStyle = "#0f0";
 
-    for (let i = 0; i < cols / font; i++) {
+    for (let i = 0; i < cols; i++) {
         let random = Math.random();
         let randomIndex = Math.floor(Math.random() * katakanaSymbols.length);
         context.fillText(katakanaSymbols[randomIndex], i * font, rowPosition[i] * font);
@@ -48,7 +50,7 @@ function render() {
     }
 
     // для эффекта затухания символов закрашиваем canvas черным полупрозрачным цветом,
-    // альфа-каналом регулируем длину затухающего хвоста (0.03)
+    // альфа-каналом регулируем скорость затухания (tail)
     context.fillStyle = `rgba(0, 0, 0, ${tail.toFixed(2)})`;
     context.fillRect(0, 0, cols, rows);
 }
@@ -56,7 +58,7 @@ function render() {
 let t = setInterval(render, delay);
 
 
-// КНОПКИ ИЗМЕНЕНИЯ ШРИФТА
+// КНОПКИ
 upFontBtn.addEventListener('click', () => {
     downFontBtn.disabled = false;
     font += 2;
@@ -70,10 +72,9 @@ downFontBtn.addEventListener('click', () => {
     font -= 2;
     fontSize.textContent = 'FONT: ' + font;
     context.font = font + 'px serif';
-    if (font < 10) downFontBtn.disabled = true;
+    if (font < 12) downFontBtn.disabled = true;
 });
 
-// КНОПКИ ИЗМЕНЕНИЯ ЗАДЕРЖКИ ОТРИСОВКИ КАДРОВ
 upDelayBtn.addEventListener('click', () => {
     delay += 10;
     delay_size.textContent = 'DELAY: ' + delay;
@@ -97,7 +98,6 @@ downDelayBtn.addEventListener('click', () => {
         downDelayBtn.disabled = true;
 });
 
-// КНОПКИ ИЗМЕНЕНИЯ ЗАДЕРЖКИ ОТРИСОВКИ КАДРОВ
 upTailBtn.addEventListener('click', () => {
     downTailBtn.disabled = false;
     tail += 0.01;
