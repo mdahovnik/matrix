@@ -40,11 +40,14 @@ button:hover{
 }
 
 button:active{
-    background-color: #90ee90;
+    background-color: #a8cca8;
 }
 
 button:disabled{
-    background-color: lightgray;
+    color: #aaaaaa30;
+    background-color: currentColor;
+    border: 2px solid currentColor;
+    -webkit-text-stroke: 2px currentColor;
     cursor: default;
 }
 
@@ -60,7 +63,8 @@ button{
     border-radius: 5px;
     margin: 2px;
     content: '▲';
-   border: 2px solid #90ee9090;
+    border: 2px solid #90ee9070;
+    color: #00800080;
 }
 
 .wrapper{
@@ -80,14 +84,13 @@ button{
 .set_font, .set_delay, .set_tail {
     display: flex;
     align-items: center;
-    -webkit-text-stroke: 2px #90ee9090;
 }
 
 .font_size, .delay_size, .tail_size{
     display: inline-block;
-    color: #008000;
+    color: #00800080;
     margin-inline-end: 10px;
     block-size: 35px;
     font-size: 34px;
-    border: 1px,solid, #0f05;
+    -webkit-text-stroke: 2px #90ee9080;
 }

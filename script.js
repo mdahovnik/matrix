@@ -4,8 +4,8 @@ const fontSize = document.querySelector('.font_size');
 const delay_size = document.querySelector('.delay_size');
 const tail_size = document.querySelector('.tail_size');
 
-const upFontBtn = document.querySelector('.upButton');
-const downFontBtn = document.querySelector('.downButton');
+const upFontBtn = document.querySelector('.up_font');
+const downFontBtn = document.querySelector('.down_font');
 downFontBtn.disabled = true;
 const upDelayBtn = document.querySelector('.up_delay');
 const downDelayBtn = document.querySelector('.down_delay');
@@ -15,47 +15,47 @@ const downTailBtn = document.querySelector('.down_tail');
 let font = 10;
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-let cols = canvas.width;
-let rows = canvas.height;
-let delay = 70; // скорость падения символов
-let tail = 0.08; // скорость затухания символов
+let screenWidth = canvas.width;
+let screenHeight = canvas.height;
+let delay = 70; // Скорость падения символов, меньше-> быстрее.
+let tail = 0.08; // Скорость затухания символов, меньше-> медленнее.
+let spread = 0.95;
 let rowPosition = [];
 let katakanaSymbols = [];
 context.font = font + 'px serif';
 
-// для контроля изменения данных
+// для контроля изменения данных на странице
 fontSize.textContent = 'FONT: ' + font;
 delay_size.textContent = 'DELAY: ' + delay;
 tail_size.textContent = 'TAIL: ' + tail;
 
-// Сохраняем в массив символы из алфавита "Катакана" (タイ ヲァヌ ギイ カア ビェン)
-// используя кодировку юникод (взял из Википедии)
+/* Используя кодировку юникод, сохраняем в массив 96 символов алфавита "Катакана" 
+(タイ ヲァヌ ギイ カア ビェン - взял из Википедии). */
 for (let i = 0; i < 96; i++)
     katakanaSymbols.push(String.fromCharCode(parseInt('0x30a0', 16) + i));
 
 // заполняем массив произвольными значениями положения символа по оси Y
-for (let i = 0; i < cols; i++)
-    rowPosition[i] = Math.floor(Math.random() * (cols / font));
+for (let i = 0; i < screenWidth; i++)
+    rowPosition[i] = Math.floor(Math.random() * (screenWidth / font));
 
-function render() {
-    // переключаемся на зеленый цвет и печатаем в цикле символы в строке
+/* Переключаемся на зеленый цвет и печатаем в цикле рандомно выбранные символы из массива.
+Если символ дошел до низа экрана и рандом больше установленного в spread, позиция символа по оси-Y сбрасывается на 0.
+После прохода по массиву, для эффекта затухания символов закрашиваем canvas черным полупрозрачным цветом с
+альфа-каналом (для регулировки скорости затухания хвоста(tail)). */
+function frame() {
     context.fillStyle = "#0f0";
-
-    for (let i = 0; i < cols; i++) {
-        let random = Math.random();
+    for (let i = 0; i < screenWidth; i++) {
         let randomIndex = Math.floor(Math.random() * katakanaSymbols.length);
+        let randomSpread = Math.random();
         context.fillText(katakanaSymbols[randomIndex], i * font, rowPosition[i] * font);
-        if (rowPosition[i] > (rows / font) && random > 0.95) rowPosition[i] = 0;
+        if (rowPosition[i] > (screenHeight / font) && randomSpread > spread) rowPosition[i] = 0;
         rowPosition[i]++;
     }
-
-    // для эффекта затухания символов закрашиваем canvas черным полупрозрачным цветом,
-    // альфа-каналом регулируем скорость затухания (tail)
     context.fillStyle = `rgba(0, 0, 0, ${tail.toFixed(2)})`;
-    context.fillRect(0, 0, cols, rows);
+    context.fillRect(0, 0, screenWidth, screenHeight);
 }
 
-let t = setInterval(render, delay);
+let render = setInterval(frame, delay);
 
 
 // КНОПКИ
@@ -80,8 +80,8 @@ upDelayBtn.addEventListener('click', () => {
     delay_size.textContent = 'DELAY: ' + delay;
     downDelayBtn.disabled = false;
     if (delay < 150) {
-        clearInterval(t);
-        t = setInterval(render, delay);
+        clearInterval(render);
+        render = setInterval(frame, delay);
     } else
         upDelayBtn.disabled = true;
 
@@ -92,8 +92,8 @@ downDelayBtn.addEventListener('click', () => {
     delay_size.textContent = 'DELAY: ' + delay;
     upDelayBtn.disabled = false;
     if (delay > 0) {
-        clearInterval(t);
-        t = setInterval(render, delay);
+        clearInterval(render);
+        render = setInterval(frame, delay);
     } else
         downDelayBtn.disabled = true;
 });
