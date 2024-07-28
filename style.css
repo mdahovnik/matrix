@@ -27,7 +27,7 @@ html {
     overflow:  hidden; 
 }
 
-#canvas{
+#canvas {
     position: absolute;
     background: rgb(0, 0, 0);
     inline-size: 100%;
@@ -36,14 +36,15 @@ html {
 
 button:hover{
     cursor: pointer;
+    color: #004600;
     background-color: #006600;
 }
 
-button:active{
+button:active {
     background-color: #a8cca8;
 }
 
-button:disabled{
+button:disabled {
     color: #aaaaaa30;
     background-color: currentColor;
     border: 2px solid currentColor;
@@ -51,7 +52,7 @@ button:disabled{
     cursor: default;
 }
 
-button{
+button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -64,10 +65,10 @@ button{
     margin: 2px;
     content: '▲';
     border: 2px solid #90ee9070;
-    color: #00800080;
+    color: #008000;
 }
 
-.wrapper{
+.wrapper {
  position: absolute;
  display: flex;
  inline-size: 100%;
@@ -75,7 +76,7 @@ button{
  inset-block-start: calc(100vh - 100px);
 }
 
-.set_data{
+.main {
     position: relative;
     inline-size: 100%;
     block-size: 100%;
@@ -86,11 +87,15 @@ button{
     align-items: center;
 }
 
-.font_size, .delay_size, .tail_size{
+.font_size, .delay_size, .tail_size {
     display: inline-block;
     color: #00800080;
     margin-inline-end: 10px;
     block-size: 35px;
     font-size: 34px;
     -webkit-text-stroke: 2px #90ee9080;
+}
+
+.invisible {
+    display: none;
 }

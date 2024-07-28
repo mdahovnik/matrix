@@ -30,7 +30,7 @@ delay_size.textContent = 'DELAY: ' + delay;
 tail_size.textContent = 'TAIL: ' + tail;
 
 /* Используя кодировку юникод, сохраняем в массив 96 символов алфавита "Катакана" 
-(タイ ヲァヌ ギイ カア ビェン - взял из Википедии). */
+(タイ ヲァヌ ギイ カア ビェン - взяли из Википедии). */
 for (let i = 0; i < 96; i++)
     katakanaSymbols.push(String.fromCharCode(parseInt('0x30a0', 16) + i));
 
@@ -39,9 +39,10 @@ for (let i = 0; i < screenWidth; i++)
     rowPosition[i] = Math.floor(Math.random() * (screenWidth / font));
 
 /* Переключаемся на зеленый цвет и печатаем в цикле рандомно выбранные символы из массива.
-Если символ дошел до низа экрана и рандом больше установленного в spread, позиция символа по оси-Y сбрасывается на 0.
-После прохода по массиву, для эффекта затухания символов закрашиваем canvas черным полупрозрачным цветом с
-альфа-каналом (для регулировки скорости затухания хвоста(tail)). */
+Если символ дошел до низа экрана и рандом больше установленного в spread, 
+позиция символа по оси-Y сбрасывается на 0. После прохода по массиву, 
+для эффекта затухания символов закрашиваем canvas черным полупрозрачным цветом с альфа-каналом 
+(для регулировки скорости затухания хвоста(tail)). */
 function frame() {
     context.fillStyle = "#0f0";
     for (let i = 0; i < screenWidth; i++) {
@@ -56,7 +57,6 @@ function frame() {
 }
 
 let render = setInterval(frame, delay);
-
 
 // КНОПКИ
 upFontBtn.addEventListener('click', () => {
@@ -112,3 +112,16 @@ downTailBtn.addEventListener('click', () => {
     if (tail.toFixed(2) < 0.02) downTailBtn.disabled = true;
 });
 
+// Скрываем кнопки после бездействия в течении 5сек
+const wrapper = document.querySelector('.wrapper');
+let noActionTimer = setTimeout(() => {
+    wrapper.classList.add('invisible');
+}, 5000);
+
+document.addEventListener('mousemove', () => {
+    wrapper.classList.remove('invisible');
+    clearTimeout(noActionTimer);
+    noActionTimer = setTimeout(() => {
+        wrapper.classList.add('invisible');
+    }, 5000);
+});
